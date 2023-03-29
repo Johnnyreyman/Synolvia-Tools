@@ -2,7 +2,7 @@
 
 lsblk -o name,type
 
-echo "Please select a drive to open. SATA /dev/sdX - NVME nvmeXnXp."
+echo "Please select a drive to open."
 read drive
 
 # Verify that the user entered a valid drive name
@@ -33,15 +33,15 @@ if [ "$luks" == "y" ]; then
   sudo cryptsetup luksOpen "$drive" luks_drive
 
   if [ "$drive_type" == "btrfs" ]; then
-    sudo mount "${drive}1" /mnt/boot/efi
+    sudo mount $(lsblk -no MOUNTPOINT "$drive") /mnt/boot/efi
     sudo mount -t btrfs --subvol=@ /dev/mapper/luks_drive /mnt
   fi
 elif [ "$luks" != "n" ]; then
   echo "Error: Invalid input for encrypted drive question."
   exit 1
 else
-  sudo mount "${drive}2" /mnt
-  sudo mount "${drive}1" /mnt/boot/efi
+  sudo mount $(lsblk -no MOUNTPOINT "$drive") /mnt
+  sudo mount $(lsblk -no MOUNTPOINT "$drive") /mnt/boot/efi
 fi
 
 if ! command -v arch-chroot &> /dev/null; then
