@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Function to list all block drive locations in /dev/ and drive names
-list_drives() {
-  echo "List of drives in /dev/:"
-  ls -l /dev/ | grep '^b' | awk '{print $9}'
-}
+lsblk -o name,type /dev
 
-list_drives
 echo "Please select a drive to open. SATA /dev/sdX - NVME nvmeXnXp."
 read drive
 
