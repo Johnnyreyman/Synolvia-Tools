@@ -5,6 +5,12 @@ lsblk -o name,type
 echo "Please select a drive to open."
 read drive
 
+# Convert drive name to device path if necessary
+case "$drive" in
+  sda) drive="/dev/sda";;
+  nvme0n1) drive="/dev/nvme0n1";;
+esac
+
 # Verify that the user entered a valid drive name
 if [ ! -b "$drive" ]; then
   echo "Error: $drive is not a valid block device!"
@@ -23,6 +29,7 @@ echo "Drive format: $drive_type"
 
 echo "Is this drive encrypted?"
 read luks
+
 
 if [ "$luks" == "y" ]; then
   if ! command -v cryptsetup &> /dev/null; then
