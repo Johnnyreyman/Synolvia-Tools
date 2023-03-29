@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lsblk -o name,type /dev
+lsblk -o name,type
 
 echo "Please select a drive to open. SATA /dev/sdX - NVME nvmeXnXp."
 read drive
